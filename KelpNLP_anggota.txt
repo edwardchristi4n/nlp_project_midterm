@@ -10,4 +10,5 @@ Pembagian Tugas:
 - Rhiquel: Menganotasi teks, membantu membuat guideline anotasi, membantu tahap adjudikasi
 - Samuel: Membantu membuat laporan, membantu membuat guideline anotasi, membantu membuat aplikasi streamlit, menganotasi teks  
 
-Link Repository GitHub: 
+Link Repository GitHub: https://github.com/edwardchristi4n/nlp_project_midterm
+Link Streamlit: https://kelpnlp-dataset-explorer.streamlit.app/
