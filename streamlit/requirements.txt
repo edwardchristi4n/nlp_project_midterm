@@ -1,0 +1,6 @@
+# Dependensi aplikasi Dataset Explorer (dipakai Streamlit Community Cloud).
+# Versi dikunci sama dengan .venv lokal (Python 3.12).
+streamlit==1.66.1
+plotly==7.1.0
+pandas==3.1.0
+numpy==2.5.4

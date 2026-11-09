@@ -1,0 +1,36 @@
+{
+  "_catatan": "Keputusan adjudikasi manual (usulan pemandu, dikonfirmasi tim). Offset karakter mengacu ke text_clean. 'label' mengganti label gold; 'ner_tambah' menambah span; 'ner_hapus' menghapus span gold.",
+  "ANC-1271": {"label": ["NONE"], "alasan": "keluhan kondisi ('bola amburadul, badminton terancam amburadul') tanpa target, tanpa cap/tuduhan/ejekan; MOCKING+NONE Rhiquel melanggar aturan"},
+  "ANC-2524": {"label": ["INSULTING"], "alasan": "'tobat sama pola pikir orang2 ini' menilai cara berpikir target (cap tipis); kalimat larangan sinetron hanya argumen konsistensi -> bukan ACCUSING. Flag."},
+  "ANC-2564": {"label": ["INSULTING"], "alasan": "'tidak rela uang pajak... menggaji komisioner seperti itu' merendahkan komisioner (tidak layak digaji); konsisten dengan teks 'ga rela bayar pajak buat bayarin manusia manusia begini' = INSULTING"},
+  "ANC-2565": {"label": ["MOCKING"], "alasan": "'semuanya aja gak usah biar gak ada prestasi' = ironi berlebihan (menyindir larangan); tidak ada tuduhan/cap eksplisit. Flag."},
+  "ANC-2850": {"label": ["NONE"], "alasan": "argumen pembelaan + kritik aturan; 'Negara lain udah ke bulan' hiperbola pembanding, bukan ejekan ke pihak tertentu"},
+
+  "ANC-1124": {"ner_tambah": [[95, 102, "GROUP"]], "alasan": "kata kepala saja: [peserta]"},
+  "ANC-1137": {"ner_tambah": [], "alasan": "'federasi badminton sedunia' = deskripsi tanpa nama -> tidak ditag (kata umum)"},
+  "ANC-1152": {"ner_tambah": [[21, 54, "NONGOV_ORG"]], "alasan": "Komnas PA = NONGOV_ORG (keputusan tim)"},
+  "ANC-1599": {"ner_tambah": [[123, 127, "GROUP"]], "alasan": "'anak' kategori manusia; PERSON salah klik"},
+  "ANC-1640": {"ner_tambah": [[5, 29, "GOV_ORG"]], "alasan": "nama lengkap 'komisi perlindungan anak' ditag utuh sebagai GOV_ORG"},
+  "ANC-1724": {"ner_tambah": [[597, 605, "GROUP"]], "alasan": "kata kepala saja: [generasi]"},
+  "ANC-1751": {"ner_tambah": [[163, 167, "GROUP"]], "alasan": "kata kepala saja: [anak]"},
+  "ANC-1967": {"ner_tambah": [[212, 216, "GROUP"]], "alasan": "kata kepala saja: [anak]"},
+  "ANC-2429": {"ner_tambah": [[117, 130, "PERSON"]], "alasan": "sapaan menempel pada nama ikut ditag: [pak de jokowi] PERSON"},
+  "ANC-2474": {"ner_tambah": [[365, 373, "NONGOV_ORG"]], "alasan": "Wismilak = merek/perusahaan -> NONGOV_ORG"},
+  "ANC-2488": {"ner_tambah": [[95, 99, "GROUP"]], "alasan": "kata kepala saja: [anak] (anak jalanan); NONGOV_ORG salah klik"},
+  "ANC-2571": {"ner_tambah": [[46, 54, "NONGOV_ORG"]], "alasan": "[pb jarum] NONGOV_ORG; 'kali yak' bukan bagian nama"},
+  "ANC-2766": {"ner_tambah": [[26, 32, "NONGOV_ORG"]], "alasan": "nama ditag utuh sesuai tulisan: [PB BCA]"},
+
+  "_catatan_koreksi_8nov": "Koreksi temuan T3-T7 (guideline/log_perubahan_guideline.txt): span mayoritas yang bertentangan dengan pedoman. T2 (julukan) lewat hapus_teks.",
+  "ANC-1900": {"ner_tambah": [[48, 57, "NONGOV_ORG"], [59, 65, "NONGOV_ORG"]], "alasan": "koreksi pedoman (temuan T3): merek yang disebut langsung -> NONGOV_ORG; nama ditag utuh sesuai tulisan seperti [PB BCA]: [PB Baygon], [PB Hit]"},
+  "ANC-2697": {"ner_tambah": [[40, 47, "NONGOV_ORG"]], "alasan": "koreksi pedoman (temuan T4): [Taliban] = NONGOV_ORG"},
+  "ANC-1998": {"ner_tambah": [[45, 52, "NONGOV_ORG"]], "alasan": "koreksi pedoman (temuan T4): [Taliban] = NONGOV_ORG"},
+  "ANC-2310": {"ner_tambah": [[7, 16, "GROUP"], [91, 103, "GROUP"]], "alasan": "koreksi pedoman (temuan T5): 'pendukung' kumpulan orang -> GROUP; token utuh [pendukungnya]"},
+  "ANC-1710": {"ner_tambah": [[192, 201, "GROUP"], [269, 278, "GROUP"]], "alasan": "koreksi pedoman (temuan T5): 'pendukung' kumpulan orang -> GROUP"},
+  "ANC-1738": {"ner_hapus": [[194, 207, "GROUP"]], "ner_tambah": [[194, 202, "GROUP"]], "alasan": "koreksi pedoman (temuan T6): kata inti saja: [generasi], bukan [generasi muda]"},
+  "ANC-2648": {"ner_hapus": [[9, 23, "GOV_ORG"]], "ner_tambah": [[9, 19, "GOV_ORG"]], "alasan": "koreksi pedoman (temuan T7): batas span [KOMNAS HAM] tanpa '..11' yang menempel karena tokenisasi"},
+
+  "_koreksi_pedoman": {
+    "_catatan": "Span mayoritas yang jelas melanggar pedoman NER dihapus otomatis (jabatan tanpa nama, kata umum organisasi tanpa nama, julukan/tokoh fiksi).",
+    "hapus_teks": ["pejabat", "komisioner", "pegawai", "menpora", "mempora", "mensos", "menteri", "ketua", "presiden", "pengurus", "lsm", "ormas", "ormas2", "sponsor", "perusahaan", "lembaga", "komisi", "yayasan", "klub", "pb", "minion", "minions", "the minion", "daddies", "sizuka"]
+  }
+}

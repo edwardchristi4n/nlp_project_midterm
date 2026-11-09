@@ -1,0 +1,29 @@
+# KelpNLP — Proyek UTS Pemrosesan Bahasa Alami
+# Python 3.11 atau 3.12
+
+# ---------- data ----------
+pandas>=2.2
+numpy>=1.26
+openpyxl>=3.1        # membaca dataset asli .xlsx
+xlrd>=2.0            # membaca kamus singkatan .xls (normalisasi)
+
+# ---------- notebook ----------
+jupyterlab>=4.0
+ipykernel>=6.29
+
+# ---------- EDA dan agreement ----------
+matplotlib>=3.8
+scikit-learn>=1.4    # Cohen's kappa antar-annotator
+statsmodels>=0.14    # Fleiss' kappa untuk 3 annotator
+
+# ---------- aplikasi dataset explorer ----------
+streamlit>=1.35
+plotly>=5.20
+
+# ---------- UAS ----------
+# torch
+# transformers
+# datasets
+# seqeval              # evaluasi NER tingkat entitas
+# sklearn-crfsuite     # baseline NER (CRF)
+# iterative-stratification   # split multilabel bertingkat

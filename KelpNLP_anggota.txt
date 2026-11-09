@@ -1,0 +1,13 @@
+Anggota Kelompok NLP: 
+
+- 240712822/Edward Christian Imanuel Tambunan
+- 240712828/Samuel Viva Gracia
+- 240712846/Rhiquelshen Charolim
+
+Pembagian Tugas: 
+
+- Edward: Menganotasi teks, membantu membuat guideline untuk anotasi, membuat code cleaning dan EDA
+- Rhiquel: Menganotasi teks, membantu membuat guideline anotasi, membantu tahap adjudikasi
+- Samuel: Membantu membuat laporan, membantu membuat guideline anotasi, membantu membuat aplikasi streamlit, menganotasi teks  
+
+Link Repository GitHub: 

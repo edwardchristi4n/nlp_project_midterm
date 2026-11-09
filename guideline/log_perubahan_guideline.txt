@@ -1,0 +1,337 @@
+LOG PERUBAHAN ANNOTATION GUIDELINE — KelpNLP
+Proyek UTS Pemrosesan Bahasa Alami
+"Jenis Serangan Verbal dan Sasarannya pada Komentar Berita Polemik KPAI vs PB Djarum"
+
+Guideline v1.0: guideline/KelpNLP_annotation_guideline_revisi4.docx (28 Okt 2026; PDF v1.0
+                sudah dihapus)
+Guideline v1.2: guideline/KelpNLP_annotation_guideline_final.docx / .pdf (29 halaman,
+                8 Nov 2026) = versi final, sudah memuat semua perubahan di log ini
+Gold dataset  : dataset/KelpNLP_dataset_annotation.jsonl (999 teks)
+                SHA-256 8a8a77faa4fb7aa76b6d3d178cbc62fa4138525411bd80ab3971910ec6138b3d
+Diperbarui    : 8 Nov 2026
+
+Tujuan log ini: mencatat setiap perubahan pedoman sejak draf pertama sampai gold
+dataset final, supaya isi guideline final SAMA dengan aturan yang benar-benar
+dipakai untuk membentuk gold dataset. Nomor bagian (3.3, 3.8, dst.) mengacu ke
+guideline v1.0 (28 Okt), kecuali disebut lain.
+
+Ringkasan versi
+  v0.x  s.d. 27 Okt   Draf awal, dipakai untuk pilot 50 teks.
+  v1.0  28 Okt        Revisi setelah pilot. = isi PDF yang ada sekarang.
+  v1.1  anotasi utama Tambahan aturan yang disepakati selama anotasi utama
+        (akhir Okt– (sesi pemandu / kalibrasi tim, terutama 3–6 Nov).
+        awal Nov)   Diterapkan di guideline final.
+  v1.2  8 Nov         Aturan adjudikasi, koreksi pedoman NER, penyelesaian
+                      temuan T1–T7, dan format gold final. Diterapkan di
+                      guideline final.
+  v1.2 = versi final: KelpNLP_annotation_guideline_final.docx / .pdf.
+
+
+==============================================================================
+v0.x -> v1.0  (28 Okt 2026, setelah pilot)
+==============================================================================
+Dasar: pilot 50 teks x 3 annotator (Rhiquel, SamuelViva, edwardchristi4n).
+Fleiss kappa pilot: INSULTING 0,85 | PROVOKING 0,78 | ACCUSING 0,67 |
+MOCKING 0,59 | NONE 0,43. Rata-rata 4 label serangan 0,72. NER F1 exact 0,85.
+Masalah utama: MOCKING dipilih sangat berbeda antar-annotator (21x vs 11/14),
+NONE rendah, ACCUSING sering tertukar dengan kritik biasa, dan NER sering
+menyorot kata umum (sponsor, bangsa, negara, pejabat).
+
+[1] Bagian 3.4 BARU — Lima pertanyaan uji + prinsip ISI vs CARA.
+    Empat label menilai ISI (INSULTING, ACCUSING, PROVOKING, CURSING),
+    MOCKING menilai CARA (tidak harfiah) sehingga boleh digabung dengan label
+    lain. Label hanya boleh diberikan bila buktinya bisa ditunjuk di teks.
+    Alasan: kappa MOCKING dan ACCUSING rendah di pilot.
+
+[2] Bagian 3.5 ACCUSING ditulis ulang dengan bahasa sederhana.
+    Definisi "penulis sendiri + perbuatan tercela", cara cepat membedakan
+    INSULTING vs ACCUSING vs kritik, uji dua langkah ("siapa yang menuduh?" /
+    "tercela atau cuma keliru?"), lima jenis tuduhan, daftar "Bukan ACCUSING".
+
+[3] Bagian 3.5 BARU — sub-bagian "Kalau di teks ada kata tuduh/dituduh/menuduh".
+    Melaporkan tuduhan orang lain -> bukan ACCUSING; menilai tuduhan keliru ->
+    NONE; "main tuduh / asal tuduh" -> NONE + flag; tuduhan disengaja demi
+    kepentingan -> ACCUSING; memfitnah / berbohong -> ACCUSING.
+
+[4] Bagian 3.4 & 3.10 BARU — aturan komentar berbentuk pertanyaan.
+    Ubah dulu menjadi pernyataan, lalu uji. Meminta dasar/penjelasan -> NONE;
+    retoris yang menyebut motif -> ACCUSING; retoris yang menilai diri target
+    -> INSULTING; tantangan sinis ("apa bisa???") -> MOCKING.
+
+[5] Bagian 3.5 & 3.6 — tabel per label diperluas (definisi, uji cepat, beri/
+    jangan beri, contoh positif/negatif, kasus ambigu) + tabel kombinasi label.
+
+[6] Bagian 3.10 BARU — tabel kasus ambigu (INSULTING vs MOCKING, ACCUSING vs
+    kritik, PROVOKING vs tuntutan akuntabilitas, CURSING vs PROVOKING, dst.).
+
+[7] Keputusan tim yang sebelumnya terbuka, sekarang ditetapkan:
+    - lebay / banyak omong / ngeyel -> INSULTING (sifat buruk target).
+    - tantangan "KPAI saja yang ..." -> selalu MOCKING, kecuali usulan kerja
+      sama yang masuk akal tanpa nada menantang.
+    - GROUP menjadi kelas terbuka (sebelumnya dibatasi lima kelompok), memakai
+      uji tiga pertanyaan (bagian 3.9).
+    - Djarum sebagai merek rokok tetap NONGOV_ORG (aturan NER 12).
+
+[8] Bagian 3.8 — aturan batas NER 9–12 ditambahkan:
+    (9) akhiran yang menempel ikut disorot dalam satu token ([anak2], [ortunya]);
+    (10) negara/tempat (Indonesia, negara, bangsa) tidak disorot;
+    (11) kata benda organisasi tanpa nama (lembaga, komisi, LSM, perusahaan
+         rokok) tidak disorot;
+    (12) Djarum sebagai merek -> NONGOV_ORG.
+
+[9] Semua contoh di guideline diganti dengan teks yang TIDAK ikut dianotasi
+    (465 teks domain tak terpakai + teks pilot), agar contoh tidak membocorkan
+    jawaban gold. Pengecualian: contoh JSON ANC-3184 di bagian 3.11.
+
+[10] Data pendukung: cleaning C9b ditambahkan (spasi setelah tanda baca yang
+     diapit huruf, mis. "PB.Djarum" -> "PB. Djarum") karena tokenizer Prodigy
+     menggabungkan token sehingga entitas tidak bisa disorot.
+
+
+==============================================================================
+v1.0 -> v1.1  (selama anotasi utama; sesi kalibrasi terutama 3–6 Nov 2026)
+==============================================================================
+Aturan berikut disepakati tim saat sesi pemandu/kalibrasi di tengah anotasi
+utama. Contoh ID adalah teks gold yang memakai aturan tersebut.
+
+--- Skema A: label --------------------------------------------------------
+
+[11] INSULTING (3.5): alay, kurang kerjaan, omong doang, koar-koar, banyak
+     cakap ditambahkan ke daftar "sifat buruk target" (melengkapi lebay).
+     Contoh: ANC-1258.
+
+[12] INSULTING (3.10, pertanyaan): pertanyaan retoris "apa kontribusi / apa
+     hasil KPAI?" -> INSULTING (menilai target tidak berguna).
+     Contoh: ANC-1943, ANC-1944.
+
+[13] INSULTING (3.5): "cuk" yang dipakai sebagai seruan (bukan ditujukan ke
+     target) bukan INSULTING. Contoh: ANC-1894 -> NONE.
+
+[14] ACCUSING (3.5 & 3.10): kasus konkret yang diabaikan + "diem aja / kemana
+     aja" -> ACCUSING (lalai/pilih kasih). Saran prioritas yang sopan tanpa
+     menuduh lalai -> NONE (tetap seperti v1.0).
+     Contoh: ANC-1185, ANC-1626.
+
+[15] ACCUSING (3.5, lima jenis tuduhan): "buang anggaran / gaji buta" ->
+     ACCUSING; "pencitraan / cari panggung / biar kelihatan kerja" -> ACCUSING
+     (motif buruk). Contoh: ANC-1777, ANC-2365, ANC-2251, ANC-2262.
+
+[16] MOCKING (3.5): penanda MOCKING baru: parodi survei (meniru survei KPAI)
+     dan analogi absurd. Penanda lama (pelesetan nama, ucapan selamat/terima
+     kasih palsu, tawa hahaha/wkwk) tetap. Contoh: ANC-1618 (parodi survei
+     "Survey saja kata sutra..."), ANC-1900 (analogi absurd "PB Baygon,
+     PB Hit"), ANC-1264 (tawa).
+
+[17] MOCKING (3.5, "Jangan beri jika"): ungkapan umum (salah kamar, kacamata
+     kuda, otak di dengkul) bukan MOCKING; bila menilai diri target ->
+     INSULTING saja (memperjelas aturan ungkapan baku v1.0).
+
+[18] MOCKING (3.5): "mon maap / maaf nih" sebelum hinaan -> MOCKING (+ label
+     isinya). Status: usulan yang dipakai saat anotasi. Contoh: ANC-2376.
+
+[19] MOCKING (3.5): pelesetan kepanjangan KPAI ("komisi pemberantas atlet",
+     "komisi pengerdil anak") -> MOCKING, ditambah ACCUSING bila isinya
+     menyalahkan; kata di dalam julukan tidak ditag NER.
+
+--- Skema B: NER ----------------------------------------------------------
+
+[20] Aturan 11 (3.8) diperluas: kata umum tanpa nama tidak ditag, termasuk
+     sponsor, perusahaan, ormas, LSM, lembaga, yayasan, klub, komisi.
+
+[21] Aturan 4 (3.8) & Aturan GROUP (3.9) diperjelas: jabatan tidak ditag,
+     baik sebagai GROUP maupun ORG: pejabat, komisioner, ketua, pengurus,
+     pegawai, menteri, menpora, mensos, presiden; juga polisi/hakim yang
+     dipakai sebagai kiasan. (Lembaganya tetap ditag: [kemenpora] GOV_ORG.)
+
+[22] NONGOV_ORG (3.7): merek/perusahaan yang disebut langsung -> NONGOV_ORG.
+     Contoh: Metro TV (ANC-2380), BCA (ANC-1159), Polytron (ANC-2371),
+     blibli (ANC-2715), Gudang Garam (ANC-1630).
+     Taliban -> NONGOV_ORG (diterapkan ke gold, lihat [44] T4).
+     BUMN (Pertamina): saat anotasi diusulkan NONGOV_ORG + flag; keputusan
+     final 8 Nov: BUMN -> GOV_ORG (lihat [44] T1).
+
+[23] NER (3.8): "PB" sendirian (tanpa nama klub) tidak ditag.
+
+[24] NER (3.8): produk sebagai alat/kegiatan (Mobile Legend, PUBG, google
+     maps) tidak ditag.
+
+[25] NER (3.8): tokoh fiksi (Shizuka) dan julukan (si gabener, bani gurun,
+     org Samin, The Minions, The Daddies) tidak ditag (lihat [42] dan [44] T2).
+
+[26] GROUP (3.9): uji individu — sebutan yang menunjuk satu orang/keluarga
+     tertentu ("anak keluarga anda") tidak ditag.
+
+[27] GROUP (3.9): "pendukung", "kader", "publik" (sebagai kumpulan orang)
+     -> GROUP (lihat [44] T5).
+
+[28] GROUP (3.8 aturan 5): kata inti saja ditegaskan: [generasi] bukan
+     [generasi penerus/muda]; [peserta] bukan [peserta Audisi]; [anak] bukan
+     [anak jalanan]. Pengecualian tetap [orang tua] (lihat [44] T6).
+
+[29] NER (3.8 aturan 9): span harus token utuh ([anaknya], [gurunya]); span
+     kosong dihapus. Kotak pink kecil di awal baris Prodigy adalah tampilan
+     span terpotong, bukan span kosong (data export: 0 span kosong).
+
+
+==============================================================================
+v1.1 -> v1.2  (8 Nov 2026, adjudikasi & gold final)
+==============================================================================
+
+--- Keputusan adjudikasi manual yang menjadi aturan umum -------------------
+(sumber: file_pendukung/KelpNLP_adjudikasi_lengkap/KelpNLP_keputusan_adjudikasi.json)
+
+[30] NONGOV_ORG: Komnas PA (Komisi Nasional Perlindungan Anak) -> NONGOV_ORG
+     (lembaga swadaya, bukan lembaga negara). Komnas HAM tetap GOV_ORG.
+     Contoh: ANC-1152.
+
+[31] GOV_ORG (3.8 aturan 2): nama lengkap tanpa kata "Indonesia" tetap ditag
+     utuh: [komisi perlindungan anak] GOV_ORG. Contoh: ANC-1640.
+
+[32] PERSON (3.8 aturan 4): sapaan yang menempel pada nama ikut ditag,
+     termasuk sapaan dua kata: [pak de jokowi] PERSON. Contoh: ANC-2429.
+
+[33] NONGOV_ORG (3.8 aturan 2): nama ditag sesuai tulisan: [PB BCA]
+     (ANC-2766), [pb jarum] tanpa kata sesudahnya (ANC-2571), Wismilak
+     (ANC-2474).
+
+[34] NER (3.8 aturan 11): deskripsi organisasi tanpa nama tidak ditag:
+     "federasi badminton sedunia" (ANC-1137).
+
+[35] GROUP (3.9): "anak" yang menunjuk kategori manusia -> GROUP, bukan
+     PERSON (ANC-1599).
+
+[36] Label: komentar keluhan kondisi tanpa target, tanpa cap/tuduhan/ejekan
+     -> NONE (ANC-1271). Menilai cara berpikir target ("pola pikir orang2 ini")
+     -> INSULTING (ANC-2524). "tidak rela uang pajak menggaji komisioner
+     seperti itu" -> INSULTING (ANC-2564). Ironi berlebihan yang menyindir
+     larangan -> MOCKING (ANC-2565). Hiperbola pembanding ("negara lain udah
+     ke bulan") bukan ejekan -> NONE (ANC-2850).
+
+--- Bagian 3.11 (Format keluaran dan alur anotasi) diganti ------------------
+
+[37] Komentar NONE disimpan dengan label ["NONE"], BUKAN daftar kosong [].
+     Setiap teks gold pasti punya minimal satu label.
+
+[38] UNANNOTATABLE dikeluarkan dari gold dataset (sesuai PDF bagian 3.2).
+     1 teks: ANC-2866 "Jangkrikkkkkk bossssss.....", sepakat 3/3. Teks ini
+     tetap dihitung di IAA dan tetap ada di file kerja (gold_auto, gold_final,
+     iaa_per_item), lalu dicatat di
+     file_pendukung/KelpNLP_adjudikasi_lengkap/KelpNLP_teks_dikeluarkan.csv.
+     Gold dataset = 1.000 - 1 = 999 teks.
+
+[39] Format gold baru (satu baris JSON per teks):
+       id, text (= text_clean), meta (thread, berita),
+       labels   : label gold, urutan tetap INSULTING, ACCUSING, MOCKING,
+                  PROVOKING, CURSING, NONE (UNANNOTATABLE tidak ada lagi),
+       spans    : entitas gold {start, end, label, text}   (PDF: "entities"),
+       tokens, ner_bio : token Prodigy dan tag BIO gold,
+       annotations : label & span asli tiap annotator,
+       adjudication: status label & NER (sepakat 3/3 / mayoritas 2/3 /
+                     MANUAL) + alasan keputusan manual.
+
+[40] Alur anotasi (3.11) diganti dengan yang benar-benar dijalankan:
+     1. Pilot 50 teks (di luar 1.000 utama) x 3 annotator -> IAA -> revisi
+        (v1.0, 28 Okt).
+     2. Anotasi utama 1.000 teks x 3 annotator secara mandiri di Prodigy,
+        dengan sesi kalibrasi di tengah jalan (v1.1).
+     3. Setiap export Prodigy digabung dengan gabungan sebelumnya (kunci id +
+        annotator, timestamp terbaru menang) karena export 3 Nov sempat
+        kehilangan 419 baris. Gabungan final: 3.000 baris.
+     4. IAA: Fleiss kappa per label (+ CI bootstrap 95%), Cohen kappa per
+        pasangan, NER F1 exact dan overlap. Ujung tanda baca span dipangkas
+        sebelum dibandingkan.
+     5. Adjudikasi otomatis (lihat [41]) -> adjudikasi manual 18 teks ->
+        koreksi pedoman (lihat [42], [44]) -> teks UNANNOTATABLE dikeluarkan
+        ([38]) -> KelpNLP_dataset_annotation.jsonl (999 teks).
+     Semua langkah ada di notebook/KelpNLP_dataset_EDA.ipynb bagian keempat.
+
+--- Aturan adjudikasi (menggantikan 3.11 butir 5) --------------------------
+
+[41] Label  : masuk gold bila dipilih >= 2 dari 3 annotator. Diputuskan
+              manual bila (a) tidak ada label mayoritas, atau (b) NONE/
+              UNANNOTATABLE mayoritas bersama label lain. Anotasi yang
+              melanggar aturan (tanpa label / NONE digabung) tetap dihitung;
+              bila dua annotator lain sepakat, gold tetap sah.
+     NER    : span (start, end, tipe) masuk gold bila persis sama pada >= 2
+              annotator (setelah ujung tanda baca dipangkas). Diputuskan manual
+              bila ada span tumpang tindih pada >= 2 annotator tetapi batas/
+              tipenya tidak mencapai mayoritas.
+     BIO    : dibuat otomatis dari span gold di atas token Prodigy.
+     Hasil (1.000 teks): label 716 sepakat 3/3, 279 mayoritas 2/3, 5 manual;
+              NER 731 sepakat, 256 mayoritas, 13 manual (total 18 teks manual).
+     Di gold 999 teks (setelah [38], [42], [44]): label 715 sepakat, 279
+              mayoritas, 5 manual; NER 727 sepakat, 235 mayoritas, 13 manual,
+              24 dikoreksi pedoman.
+
+[42] Koreksi pedoman otomatis: span mayoritas yang teksnya persis salah satu
+     kata berikut dihapus dari gold karena melanggar [20], [21], [23], [25]:
+     pejabat, komisioner, pegawai, menpora, mempora, mensos, menteri, ketua,
+     presiden, pengurus, lsm, ormas, ormas2, sponsor, perusahaan, lembaga,
+     komisi, yayasan, klub, pb, minion, minions, the minion, daddies, sizuka.
+     Terhapus 26 span: pejabat 7, lsm 4, menpora 3, minion 2, daddies 2,
+     mempora 1, komisioner 1, ormas 1, ormas2 1, sizuka 1, pegawai 1,
+     minions 1, the minion 1. ("minions", "the minion", "daddies" ditambahkan
+     8 Nov, lihat [44] T2.)
+     Rincian per teks: KelpNLP_log_keputusan.csv.
+
+[43] Hasil IAA final (1.000 teks x 3) untuk dicantumkan di guideline/laporan:
+     Fleiss kappa INSULTING 0,886 | ACCUSING 0,833 | MOCKING 0,795 |
+     PROVOKING 0,950 | CURSING 0,737 | NONE 0,807 | UNANNOTATABLE 0,750.
+     Rata-rata 5 label serangan 0,840 (hampir sempurna). NER F1 exact 0,926,
+     overlap 0,942. Kenaikan dari pilot: kappa 0,72 -> 0,84; NER 0,85 -> 0,93.
+
+
+--- Penyelesaian temuan pencocokan aturan vs gold (8 Nov) ------------------
+
+[44] Saat aturan v1.1/v1.2 dicocokkan dengan gold, ditemukan span yang lolos
+     voting mayoritas tetapi bertentangan dengan aturan tim. Keputusan tim:
+     T1  ANC-1792 [Pertamina] GOV_ORG (3/3) -> DIPERTAHANKAN. Aturan BUMN
+         diubah menjadi GOV_ORG (badan usaha milik negara dihitung lembaga
+         negara), mengikuti pilihan ketiga annotator.
+     T2  Julukan pemain yang terlanjur ditag dihapus lewat [42]:
+         ANC-1616 [minions], [Daddies]; ANC-2893 [The minion];
+         ANC-2326 [daddies].
+     T3  ANC-1900 ditambah [PB Baygon], [PB Hit] NONGOV_ORG (merek; nama
+         ditag utuh sesuai tulisan seperti [PB BCA]).
+     T4  ANC-2697 dan ANC-1998 ditambah [Taliban] NONGOV_ORG.
+     T5  ANC-2310 ditambah [pendukung], [pendukungnya]; ANC-1710 ditambah
+         [pendukung] x2 (GROUP). "LSM pendukungnya" (ANC-2518) tidak ditag
+         karena menunjuk organisasi, bukan kumpulan orang.
+     T6  ANC-1738 [generasi muda] diganti [generasi] (kata inti).
+     T7  ANC-2648 [KOMNAS HAM..11] diganti [KOMNAS HAM]. Token Prodigy
+         "HAM..11" menempel karena tokenisasi, jadi tag BIO token itu tetap
+         I-GOV_ORG.
+     T3–T7 ditulis di KelpNLP_keputusan_adjudikasi.json (alasan diawali
+     "koreksi pedoman (temuan Tx)"). Notebook kini memproses ner_hapus
+     sebelum ner_tambah supaya batas span bisa diganti (T6, T7).
+     Dampak: 10 teks berubah; entitas gold 2.201 -> 2.205
+     (NONGOV_ORG 513 -> 517; GROUP tetap 775 = -4 julukan +4 pendukung).
+
+
+==============================================================================
+PENERAPAN KE GUIDELINE FINAL (v1.2, 8 Nov 2026)
+==============================================================================
+File: guideline/KelpNLP_annotation_guideline_final.docx (+ .pdf), dibuat dari
+KelpNLP_annotation_guideline_revisi4.docx (= v1.0). Bagian yang diubah:
+- Sampul        : "Versi 1.2 (final) · 8 November 2026"; judul dokumen diganti
+                  dari "KelpNLP Progres 1".
+- 1   Tujuan    : jumlah data final (1.515 domain, 1.000 + 50 pilot, gold 999).
+- 2   Seleksi   : baris sampling final (populasi 1.509, 476 + 524, SEED 42) +
+                  baris baru "Anotasi dan adjudikasi" (999); proporsi per berita
+                  sampel vs populasi; keterbatasan oversampling (47,6%).
+- 3   Judul     : "Rencana anotasi" -> "Anotasi".
+- 3.1, 3.2      : UNANNOTATABLE dihitung di IAA tetapi dikeluarkan dari gold [38].
+- 3.5 INSULTING : [11] [12] [13]. MOCKING: [16] [17] [18] [19].
+      ACCUSING  : [14] [15].
+- 3.7 Skema B   : BUMN -> GOV_ORG [44 T1], merek/Komnas PA/Taliban -> NONGOV_ORG
+                  [22] [30], sapaan dua kata [32], tokoh fiksi/julukan [25].
+- 3.8 Batas NER : aturan 4, 5, 11 diperluas [20] [21] [28] [34]; aturan baru 13–16
+                  [22] [23] [24] [25] [29] [33] [44 T7].
+- 3.9 GROUP     : kader, publik [27]; baris "pendukung" [44 T5] dan uji individu
+                  [26].
+- 3.11 Format   : label ["NONE"], format gold baru + contoh JSON ANC-3184 [37]
+                  [39]; alur anotasi 6 langkah [40].
+- 3.12 BARU     : Aturan adjudikasi [41] [42] [36] + hasil adjudikasi.
+- 3.13 BARU     : Hasil kesepakatan antar-annotator [43].
+- 4   BARU      : Riwayat perubahan pedoman (ringkasan versi 0.x–1.2; rincian di
+                  log ini).
